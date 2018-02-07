@@ -47,7 +47,6 @@ void get_i2c(){ //get i2C data on buf[]
   {
     if(!bcm2835_i2c_begin()){
       printf("begin failed, root\n");
-      return 1;
     }
   }
 
