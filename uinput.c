@@ -231,10 +231,10 @@ int main(void) {
 
     sleep(2);
 
-    if(ioctl(fd, UI_DEV_DESTROY) < 0)
-        die("error: ioctl");
-
+    if(ioctl(fd, UI_DEV_DESTROY) < 0) die("error: ioctl");
     close(fd);
 
-    return 0;
+	bcm2835_close();
+    
+	return 0;
 }
