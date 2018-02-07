@@ -123,38 +123,3 @@ int main (void) {
     }
     return 0;
 }
-
-/*
-int main(void) { 
-    unsigned int i = 0; 
- 
-    CloseI2C1();                            // close i2c if was operating earlier 
-    TRISB = 0xFFFF;
-    OpenI2C1((I2C_ON | I2C_IDLE_CON | I2C_7BIT_ADD | I2C_CLK_REL | I2C_STR_EN), I2C1_BRG); 
-    I2C1ADD = 15;                     // initialze slave address to 1E 
-    //I2C1BRG = 37;
-    
-    while(1) { 
-        IdleI2C1();
-        //while(!I2C1STATbits.S);
-        //SI2C1_Clear_Intr_Status_Bit;
-        //while(!I2C1STATbits.R_W);
-        //SI2C1_Clear_Intr_Status_Bit;
-        while(!IFS1bits.SI2C1IF);
-        SlaveWriteI2C1(write_byte);
-        write_byte = 0;
-        //StopI2C1(); 
-        
-        while(i < 100){++i;}
-          i = 0;
-          if (PORTBbits.RB4)
-          {
-              write_byte = 1;
-          }  
- 
-    } 
- 
-    CloseI2C1(); 
-    return 0;
- }
- * */
