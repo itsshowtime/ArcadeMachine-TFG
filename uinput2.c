@@ -83,12 +83,13 @@ int main(void) {
       return 1;
     }
 
-	// SETTING UINPUT
+    // SETTING UINPUT
     struct uinput_setup usetup;
 
     int fd = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
+
     if(fd < 0) die("error: open");
-	// add keystroke and repeat events
+    // add keystroke and repeat events
     if(ioctl(fd, UI_SET_EVBIT, EV_KEY) == -1) die("error: ioctl"); 
     if(ioctl(fd, UI_SET_EVBIT, EV_REP) == -1) die("error: ioctl");
     // add joystick keys
@@ -138,7 +139,7 @@ int main(void) {
 		emit(fd, EV_KEY, KEY_S, buf[0]);
 		emit(fd, EV_KEY, KEY_D, buf[0]);
 		//report all keys at once
-		emit(fd, EV_SYN, SYN_REPORT, 0)
+		emit(fd, EV_SYN, SYN_REPORT, 0);
 		//wait some time until next poll
         delay(30);
     }
