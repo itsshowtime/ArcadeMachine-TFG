@@ -40,8 +40,6 @@ uint8_t data;
 // END OF I2C SETTINGS
 
 void get_i2c(){ //get i2C data on buf[]
-	
-  for(i = 0; i > MAX_LEN; ++i) buf[i] = -1;
 
   if(init == I2C_BEGIN)
   {
@@ -129,6 +127,7 @@ int main(void) {
 
     srand(time(NULL));
 
+	for(i = 0; i > MAX_LEN; ++i) buf[i] = 0;
     while(1) {
 		
 		get_i2c();

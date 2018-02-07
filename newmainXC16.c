@@ -66,7 +66,7 @@ void __attribute__((__interrupt__, no_auto_psv )) _SI2C1Interrupt(void) {
        I2C1TRN = write_buffer[buffer_index];
        buffer_index++;
        I2C1CONbits.SCLREL = 1;     //release clock line so MASTER can drive it
-       if (write_buffer[buffer_index] == 8) e_mystate = STATE_SEND_READ_LAST;
+       if (write_buffer[buffer_index] == -1) e_mystate = STATE_SEND_READ_LAST;
          //this is the last character, after byte is shifted out, release the clock line again
        break;
     
@@ -89,11 +89,11 @@ int main (void) {
     TRISB = 0xFFFF;
     
     for(i = 0; i < BUFFSIZE - 1; ++i) {
-        read_buffer[i] = 5;
-        write_buffer[i] = 5;
+        read_buffer[i] = 0;
+        write_buffer[i] = 0;
     }   
-    read_buffer[BUFFSIZE - 1]  = 8;
-    write_buffer[BUFFSIZE - 1] = 8;
+    read_buffer[BUFFSIZE - 1]  = -1;
+    write_buffer[BUFFSIZE - 1] = -1;
         
     I2C1CONbits.I2CEN   = 1;
     I2C1CONbits.I2CSIDL = 0;    
