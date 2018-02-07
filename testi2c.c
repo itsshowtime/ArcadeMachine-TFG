@@ -7,7 +7,6 @@
 #define MODE_READ  0
 #define MODE_WRITE 1
 #define MAX_LEN 14
-char wbuf[MAX_LEN];
 
 typedef enum {
     NO_ACTION,
