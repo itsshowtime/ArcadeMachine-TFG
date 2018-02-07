@@ -41,6 +41,8 @@ uint8_t data;
 
 void get_i2c(){ //get i2C data on buf[]
 
+  for(i = 0; i < MAX_LEN; ++i) buf[i] = 0;
+
   if(init == I2C_BEGIN)
   {
     if(!bcm2835_i2c_begin()){
@@ -80,6 +82,8 @@ int main(void) {
     if(fd < 0)
         die("error: open");
     if(ioctl(fd, UI_SET_EVBIT, EV_KEY) < 0)
+        die("error: ioctl"); 
+    if(ioctl(fd, UI_SET_EVBIT, EV_REP) < 0)
         die("error: ioctl");
     if(ioctl(fd, UI_SET_KEYBIT, KEY_W) < 0)
         die("error: ioctl");
@@ -127,7 +131,6 @@ int main(void) {
 
     srand(time(NULL));
 
-	for(i = 0; i > MAX_LEN; ++i) buf[i] = 0;
     while(1) {
 		
 		get_i2c();
