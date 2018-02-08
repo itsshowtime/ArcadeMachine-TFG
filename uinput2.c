@@ -84,16 +84,18 @@ int main(void) {
     }
 
     // SETTING UINPUT
-    struct uinput_setup usetup;
+//    struct uinput_setup usetup;
+    struct uinput_user_dev usetup;
 
     int fd = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
+//    int fd = open("/dev/uinput", O_WRONLY | O_NONBLOCK | O_APPEND);
 
     if(fd < 0) die("error: open");
     // add keystroke and repeat events
     if(ioctl(fd, UI_SET_EVBIT, EV_KEY) == -1) die("error: ioctl"); 
     if(ioctl(fd, UI_SET_EVBIT, EV_REP) == -1) die("error: ioctl");
     // add joystick keys
-	if(ioctl(fd, UI_SET_KEYBIT, KEY_W) == -1) die("error: ioctl");
+    if(ioctl(fd, UI_SET_KEYBIT, KEY_W) == -1) die("error: ioctl");
     if(ioctl(fd, UI_SET_KEYBIT, KEY_A) == -1) die("error: ioctl");
     if(ioctl(fd, UI_SET_KEYBIT, KEY_S) == -1) die("error: ioctl");
     if(ioctl(fd, UI_SET_KEYBIT, KEY_D) == -1) die("error: ioctl");	
@@ -110,34 +112,36 @@ int main(void) {
 
     memset(&usetup, 0, sizeof(usetup));
     usetup.id.bustype = BUS_USB;
-    usetup.id.vendor = 0x1234; /* sample vendor */
-    usetup.id.product = 0x5678; /* sample product */
+//    usetup.id.bustype = BUS_VIRTUAL;
+    usetup.id.vendor  = 0x0001; /* sample vendor  */
+    usetup.id.product = 0x0002; /* sample product */
+    usetup.id.version = 0x0003; /* sample version */
+//    snprintf(usetup.name, UINPUT_MAX_NAME_SIZE, "Analog Storker");
     strcpy(usetup.name, "Arcade Machine Analog and Buttons");
 
-    if(ioctl(fd, UI_DEV_SETUP, &usetup) == -1)
-		die("error: ioctl");
-    if(ioctl(fd, UI_DEV_CREATE) == -1)
-		die("error: ioctl");
-    sleep(1);
+//    if(ioctl(fd, UI_DEV_SETUP, &usetup) == -1) die("error: ioctl");i
+    if(write(fd, &usetup, sizeof(usetup)) == -1) die("error: write");
+    if(ioctl(fd, UI_DEV_CREATE) == -1) die("error: ioctl");
+    sleep(2);
 
     while(1) {
 		
 		get_i2c();
 		//send all key status
 		emit(fd, EV_KEY, KEY_0, buf[0]);
-		emit(fd, EV_KEY, KEY_1, buf[0]);
-		emit(fd, EV_KEY, KEY_2, buf[0]);
-		emit(fd, EV_KEY, KEY_3, buf[0]);
-		emit(fd, EV_KEY, KEY_4, buf[0]);
-		emit(fd, EV_KEY, KEY_5, buf[0]);
-		emit(fd, EV_KEY, KEY_6, buf[0]);
-		emit(fd, EV_KEY, KEY_7, buf[0]);
-		emit(fd, EV_KEY, KEY_8, buf[0]);
-		emit(fd, EV_KEY, KEY_9, buf[0]);
-		emit(fd, EV_KEY, KEY_W, buf[0]);
-		emit(fd, EV_KEY, KEY_A, buf[0]);
-		emit(fd, EV_KEY, KEY_S, buf[0]);
-		emit(fd, EV_KEY, KEY_D, buf[0]);
+		emit(fd, EV_KEY, KEY_1, buf[1]);
+		emit(fd, EV_KEY, KEY_2, buf[2]);
+		emit(fd, EV_KEY, KEY_3, buf[3]);
+		emit(fd, EV_KEY, KEY_4, buf[4]);
+		emit(fd, EV_KEY, KEY_5, buf[5]);
+		emit(fd, EV_KEY, KEY_6, buf[6]);
+		emit(fd, EV_KEY, KEY_7, buf[7]);
+		emit(fd, EV_KEY, KEY_8, buf[8]);
+		emit(fd, EV_KEY, KEY_9, buf[9]);
+		emit(fd, EV_KEY, KEY_W, buf[10]);
+		emit(fd, EV_KEY, KEY_A, buf[11]);
+		emit(fd, EV_KEY, KEY_S, buf[12]);
+		emit(fd, EV_KEY, KEY_D, buf[13]);
 		//report all keys at once
 		emit(fd, EV_SYN, SYN_REPORT, 0);
 		//wait some time until next poll

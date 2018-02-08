@@ -77,7 +77,7 @@ int main(void) {
     bcm2835_gpio_fsel(PIN, BCM2835_GPIO_FSEL_INPT);
     bcm2835_gpio_set_pud(PIN, BCM2835_GPIO_PUD_UP);
 
-	// SETTING UINPUT
+    // SETTING UINPUT
     fd = open("/dev/uinput", O_WRONLY | O_NONBLOCK | O_APPEND);
     if(fd < 0)
         die("error: open");
@@ -128,8 +128,6 @@ int main(void) {
         die("error: ioctl");
 
     sleep(2);
-
-    srand(time(NULL));
 
     while(1) {
 		
