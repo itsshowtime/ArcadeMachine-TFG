@@ -20,7 +20,7 @@
 #include <stdio.h>
 
 // Input on RPi pin GPIO 15
-#define PIN RPI_V2_GPIO_P1_29
+#define PIN RPI_GPIO_P1_15
 
 int main(int argc, char **argv)
 {
@@ -41,7 +41,7 @@ int main(int argc, char **argv)
     {
 	// Read some data
 	uint8_t value = bcm2835_gpio_lev(PIN);
-	printf("read from pin 29: %d\n", value);
+	printf("read from pin 15: %d\n", value);
 	
 	// wait a bit
 	delay(500);
