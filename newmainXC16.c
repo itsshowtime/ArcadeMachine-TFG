@@ -9,7 +9,7 @@
 #include "xc.h"
 #include <p24F16KA101.h>
 #include <i2c.h>
-#include <p24Fxxxx.h>
+//#include <p24Fxxxx.h>
         
 volatile char write_byte;
 
@@ -36,7 +36,6 @@ volatile char write_byte;
 void __attribute__((__interrupt__, no_auto_psv )) _SI2C1Interrupt(void) {
     uint8_t u8_c;
     IFS1bits.SI2C1IF = 0;
-    //int i;
     
     switch (e_mystate) {
        
@@ -88,13 +87,18 @@ int main (void) {
     TRISA = 0xFFFF;
     TRISB = 0xFFFF;
     
-    for(i = 0; i < BUFFSIZE - 1; ++i) {
-        read_buffer[i] = 0;
+    for(i = 0; i < BUFFSIZE; ++i) {
+        read_buffer[i]  = 0;
         write_buffer[i] = 0;
     }   
     read_buffer[BUFFSIZE - 1]  = -1;
     write_buffer[BUFFSIZE - 1] = -1;
-        
+    
+    FOSCbits.POSCMD1  = 0;
+    FOSCbits.POSCMD0  = 0;
+    FOSCbits.OSCIOFNC = 0;
+    FICDbits.DEBUG    = 1; 
+    
     I2C1CONbits.I2CEN   = 1;
     I2C1CONbits.I2CSIDL = 0;    
     I2C1CONbits.IPMIEN  = 0;
@@ -113,13 +117,72 @@ int main (void) {
     IPC4bits.SI2C1P0 = 1;
     IEC1bits.SI2C1IE = 1;
     
+    
+    TRISA = 0xFFFF;
+    TRISB = 0xFFFF;
+    i = 0;
     while(1){
-        while(i < 100){++i;}
+//        while(i < 100){++i;}
         i = 0;
-        if (PORTBbits.RB4){
-            write_buffer[4] = 1;
+        //Main buttons
+        if (PORTAbits.RA1){
+            write_buffer[0]  = 1;
         }
-        else write_buffer[4] = 0;
+        else write_buffer[0] = 0;   
+        if (PORTBbits.RB0){
+            write_buffer[1]  = 1;
+        }
+        else write_buffer[1] = 0;   
+        if (PORTBbits.RB1){
+            write_buffer[2]  = 1;
+        }
+        else write_buffer[2] = 0;   
+        if (PORTBbits.RB2){
+            write_buffer[3]  = 1;
+        }
+        else write_buffer[3] = 0;   
+        if (PORTAbits.RA2){
+            write_buffer[4]  = 1;
+        }
+        else write_buffer[4] = 0;   
+        if (PORTAbits.RA3){
+            write_buffer[5]  = 1;
+        }
+        else write_buffer[5] = 0;           
+        if (PORTBbits.RB4){
+            write_buffer[6]  = 1;
+        }
+        else write_buffer[6] = 0;
+        if (PORTAbits.RA4){
+            write_buffer[7]  = 1;
+        }
+        else write_buffer[7] = 0;
+        /********* Joystick ************/
+        if (PORTBbits.RB15){
+            write_buffer[8]  = 1;
+        }
+        else write_buffer[8] = 0;
+        if (PORTBbits.RB14){
+            write_buffer[9]  = 1;
+        }
+        else write_buffer[9] = 0;
+        if (PORTBbits.RB13){
+            write_buffer[10]  = 1;
+        }
+        else write_buffer[10] = 0;
+        if (PORTBbits.RB12){
+            write_buffer[11]  = 1;
+        }
+        else write_buffer[11] = 0;        
+        /******* Start+Select *********/
+        if (PORTAbits.RA6){
+            write_buffer[12]  = 1;
+        }
+        else write_buffer[12] = 0; 
+        if (PORTBbits.RB7){
+            write_buffer[13]  = 1;
+        }
+        else write_buffer[13] = 0;
     }
     return 0;
 }
